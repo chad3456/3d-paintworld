@@ -11,14 +11,14 @@ import { groundRings } from '../oilpaint/ground.js';
 
 // leaf litter: gold, orange, russet, brown, moss; and the bare earth of the way
 export const LITTER = /* glsl */ `
-const vec3 LIT_L[6] = vec3[6](vec3(0.97, 0.71, 0.2), vec3(0.94, 0.5, 0.13), vec3(0.8, 0.25, 0.11), vec3(0.64, 0.45, 0.28), vec3(0.56, 0.62, 0.2), vec3(0.74, 0.58, 0.42));
-const vec3 LIT_M[6] = vec3[6](vec3(0.74, 0.47, 0.15), vec3(0.7, 0.33, 0.11), vec3(0.58, 0.18, 0.11), vec3(0.45, 0.3, 0.21), vec3(0.34, 0.42, 0.15), vec3(0.5, 0.38, 0.3));
-const vec3 LIT_S[6] = vec3[6](vec3(0.43, 0.25, 0.2), vec3(0.4, 0.19, 0.18), vec3(0.33, 0.12, 0.17), vec3(0.25, 0.18, 0.22), vec3(0.16, 0.25, 0.2), vec3(0.27, 0.22, 0.27));
+const vec3 LIT_L[6] = vec3[6](vec3(0.66, 0.74, 0.26), vec3(0.98, 0.52, 0.14), vec3(0.8, 0.62, 0.3), vec3(0.62, 0.46, 0.28), vec3(0.42, 0.62, 0.22), vec3(0.78, 0.6, 0.42));
+const vec3 LIT_M[6] = vec3[6](vec3(0.36, 0.48, 0.16), vec3(0.72, 0.3, 0.1), vec3(0.54, 0.4, 0.2), vec3(0.42, 0.3, 0.2), vec3(0.22, 0.42, 0.16), vec3(0.52, 0.38, 0.3));
+const vec3 LIT_S[6] = vec3[6](vec3(0.13, 0.25, 0.16), vec3(0.4, 0.17, 0.16), vec3(0.3, 0.22, 0.18), vec3(0.24, 0.18, 0.2), vec3(0.09, 0.22, 0.16), vec3(0.28, 0.22, 0.26));
 // r is this dab's own chance; v drifts slowly over the ground, so leaves of a kind lie together
 int litterKind(float r, float v, float moss, float way) {
   if (r < way * 0.62) return 5;
   if (fract(r * 7.31) < moss * 0.1) return 4;
-  return v < 0.42 ? 0 : v < 0.7 ? 1 : v < 0.84 ? 2 : 3;
+  return v < 0.55 ? 0 : v < 0.63 ? 1 : v < 0.8 ? 2 : 3;
 }
 vec3 litter(int k, float lit, float r) { return paint3(LIT_L[k], LIT_M[k], LIT_S[k], lit, r); }
 `;
@@ -43,7 +43,7 @@ void makeDab(inout Dab d) {
   int other = litterKind(q.z, fract(patch_ + 0.2 + (q.w - 0.5) * 0.5), m.b, m.r * 0.5);
   vec3 c2 = litter(other, lit, q.w);
   // the open ground of the clearing is grass gone to gold
-  vec3 gl = paint3(vec3(0.95, 0.8, 0.36), vec3(0.62, 0.52, 0.2), vec3(0.2, 0.2, 0.2), lit, q.y);
+  vec3 gl = paint3(vec3(0.74, 0.84, 0.3), vec3(0.4, 0.55, 0.18), vec3(0.14, 0.24, 0.16), lit, q.y);
   float grassy = step(r.z, m.g * 0.8);
   c1 = mix(c1, gl, grassy);
   // here and there a wet leaf in the shade gives back the sky
@@ -94,9 +94,9 @@ void makeDab(inout Dab d) {
   float gust = gustAt(xz);
   float lit = sunAt(P + vec3(0.0, 0.3, 0.0));
   vec3 c;
-  if (grass > 0.5) c = paint3(vec3(1.0, 0.88, 0.46), vec3(0.76, 0.6, 0.24), vec3(0.3, 0.27, 0.2), lit, f.w);
-  else if (kind < 0.45) c = paint3(vec3(0.98, 0.58, 0.16), vec3(0.68, 0.36, 0.13), vec3(0.34, 0.18, 0.16), lit, f.w);   // bracken turned rust
-  else if (kind < 0.75) c = paint3(vec3(1.0, 0.82, 0.26), vec3(0.72, 0.54, 0.15), vec3(0.34, 0.26, 0.16), lit, f.w);    // fern gone yellow
+  if (grass > 0.5) c = paint3(vec3(0.8, 0.9, 0.38), vec3(0.46, 0.62, 0.2), vec3(0.16, 0.28, 0.16), lit, f.w);
+  else if (kind < 0.45) c = paint3(vec3(0.5, 0.76, 0.24), vec3(0.24, 0.48, 0.15), vec3(0.08, 0.24, 0.14), lit, f.w);   // bracken turned rust
+  else if (kind < 0.75) c = paint3(vec3(0.76, 0.86, 0.3), vec3(0.42, 0.58, 0.16), vec3(0.15, 0.28, 0.14), lit, f.w);    // fern gone yellow
   else c = paint3(vec3(0.66, 0.74, 0.25), vec3(0.34, 0.45, 0.16), vec3(0.13, 0.23, 0.17), lit, f.w);                     // still green
   c = jitter(c, f.zwx, 0.55);
   float sway = sin(uTime * (1.6 + f.z) + f.w * 40.0) * (0.04 + 0.1 * gust);

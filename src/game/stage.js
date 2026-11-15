@@ -18,7 +18,7 @@ import { Input } from '../figure/input.js';
 import { Follow } from '../figure/camera.js';
 import { loadRigs } from './rigs.js';
 import { buildCharacter } from './character.js';
-import { HEROES } from './cast.js';
+import { HEROES, FOES } from './cast.js';
 import { Hero } from './hero.js';
 import { createFx } from './fx.js';
 import { createFoes } from './foes.js';
@@ -311,7 +311,7 @@ export async function play(realmModule, heroId, card) {
       if (!player.leap(1 / 60, 5.2)) return false;
       // he goes up and forward, and comes down hard
       const f = V(Math.sin(player.yaw), 0, Math.cos(player.yaw));
-      player.vel.x = f.x * 7; player.vel.z = f.z * 7;
+      player.vel.x = f.x * 3.4; player.vel.z = f.z * 3.4;
       slamming = true;
     }
     cool.special = spec.cooldown;
@@ -442,6 +442,7 @@ export async function play(realmModule, heroId, card) {
       shared.uLamp.value.set(root.x, root.y + 1.2, root.z, realm.lamp);
     }
     realm.follow?.(camera.position.x, camera.position.z);
+    if (window.lab.fast) return; // tests of the game's rules step it without painting
     shade.update(scene, root);
     canvas.paint(time, root);
   }
@@ -466,8 +467,11 @@ export async function play(realmModule, heroId, card) {
     view(eyeAt, target) { follow.free = eyeAt ? { position: new THREE.Vector3(...eyeAt), target: new THREE.Vector3(...target) } : null; },
     primary() { wants.primary = true; },
     special() { wants.special = true; },
+    jump() { const was = input.override; input.override = (dt) => ({ ...was(dt), jump: true }); tick(1 / 60); input.override = was; },
+    fast: false,
     state() { return { health, dead, mode: player.mode, feet: player.feet.toArray().map((v) => +v.toFixed(2)), foes: foes.list.length, alive: foes.alive().length, objective: hud.root.querySelector('.hud-goal')?.textContent }; },
   };
+  if (capture) window.__cast = { HEROES, FOES };
   if (capture) input.override = () => ({ move: { x: 0, y: 0 }, walk: false, sprint: false, strafe: false, jump: false, look: { x: 0, y: 0 }, zoom: 0, device: 'keyboard' });
 
   // --- warming up: every shader is built and drawn once before anyone is let in ---

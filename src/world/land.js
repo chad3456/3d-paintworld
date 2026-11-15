@@ -118,7 +118,7 @@ export function createLand(shared) {
         // asked square by ragged square, so that what shows between the dabs is itself in touches
         vec2 sq = floor(vWorld.xz / 0.32 + (texture(tNoise, vWorld.xz / 2.3).rg - 0.5) * 1.8) * 0.32;
         float lit = step(0.5, woodSunAt(vec3(sq.x, vWorld.y + 0.2, sq.y)));
-        vec3 c = mix(vec3(0.3, 0.16, 0.16), vec3(0.72, 0.44, 0.14), lit);
+        vec3 c = mix(vec3(0.12, 0.2, 0.15), vec3(0.5, 0.52, 0.16), lit);
         c = mix(c, mix(vec3(0.21, 0.17, 0.2), vec3(0.6, 0.47, 0.33), lit), m.r);
         c *= 0.78 + 0.3 * texture(tNoise, vWorld.xz / 9.0).r;
         outC = vec4(hazed(c, vWorld), 1.0);

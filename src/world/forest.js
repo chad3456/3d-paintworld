@@ -23,9 +23,9 @@ vec3 bark(int k, vec3 P, vec3 Nn, float r, float foot) {
 `;
 
 const LEAF = /* glsl */ `
-const vec3 LEAF_L[5] = vec3[5](vec3(1.0, 0.8, 0.2), vec3(1.0, 0.57, 0.12), vec3(0.94, 0.26, 0.09), vec3(0.86, 0.82, 0.24), vec3(1.0, 0.9, 0.36));
-const vec3 LEAF_M[5] = vec3[5](vec3(0.76, 0.49, 0.11), vec3(0.72, 0.33, 0.09), vec3(0.61, 0.15, 0.08), vec3(0.52, 0.52, 0.14), vec3(0.82, 0.62, 0.17));
-const vec3 LEAF_S[5] = vec3[5](vec3(0.46, 0.25, 0.1), vec3(0.42, 0.17, 0.09), vec3(0.34, 0.09, 0.11), vec3(0.24, 0.29, 0.13), vec3(0.5, 0.33, 0.13));
+const vec3 LEAF_L[5] = vec3[5](vec3(0.62, 0.82, 0.24), vec3(1.0, 0.5, 0.12), vec3(0.34, 0.64, 0.22), vec3(0.8, 0.86, 0.3), vec3(0.9, 0.92, 0.42));
+const vec3 LEAF_M[5] = vec3[5](vec3(0.3, 0.52, 0.15), vec3(0.76, 0.28, 0.08), vec3(0.15, 0.4, 0.15), vec3(0.44, 0.58, 0.16), vec3(0.6, 0.66, 0.2));
+const vec3 LEAF_S[5] = vec3[5](vec3(0.1, 0.27, 0.13), vec3(0.4, 0.14, 0.1), vec3(0.06, 0.2, 0.13), vec3(0.17, 0.31, 0.13), vec3(0.28, 0.36, 0.14));
 `;
 
 function tube(out, pts, radii, sides, kind, seed) {
@@ -322,7 +322,7 @@ export function createForest(shared) {
           c = paint3(LEAF_L[k], LEAF_M[k], LEAF_S[k], x, r.x);
           c = mix(c, vec3(0.2, 0.16, 0.25), (1.0 - smoothstep(0.1, 0.4, x)) * 0.14);
           // turned in a gust, the pale back of the leaf
-          if (q.x < gust * 0.3) c = mix(c, vec3(1.0, 0.92, 0.6), 0.4 * sun);
+          if (q.x < gust * 0.3) c = mix(c, vec3(0.86, 0.95, 0.6), 0.4 * sun);
         }
         c = jitter(c, r.yzw, aData.w > 0.5 ? 0.3 : 0.55);
         float turn = (q.y - 0.5) * 2.0 + sin(uTime * 3.0 + r.w * 50.0) * 0.5 * gust;

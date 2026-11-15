@@ -71,7 +71,7 @@ button { font: inherit; color: inherit; }
 /* --- choosing a hero --- */
 .pick { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; z-index: 3; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8); }
 .pick > * { pointer-events: auto; }
-.pick-top { text-align: center; padding-top: 26px; }
+.pick-top { text-align: center; padding: 22px 0 46px; background: linear-gradient(rgba(20, 12, 10, 0.72), rgba(20, 12, 10, 0)); pointer-events: none; }
 .pick-top h1 { font-weight: normal; font-size: clamp(30px, 5vw, 60px); letter-spacing: 0.16em; margin: 0; text-transform: uppercase; }
 .pick-top div { font-size: 14px; letter-spacing: 0.34em; text-transform: uppercase; color: #f2c56b; margin-top: 4px; }
 .pick-panel { margin: 0 auto 26px; width: min(880px, 94vw); background: rgba(20, 12, 10, 0.72); border: 1px solid rgba(242, 197, 107, 0.45); border-radius: 4px; padding: 16px 20px 18px; box-sizing: border-box; }

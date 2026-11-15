@@ -7,6 +7,10 @@ import { HEROES } from './game/cast.js';
 
 const REALMS = {
   studio: () => import('./realms/studio.js'),
+  ayodhya: () => import('./realms/ayodhya.js'),
+  forest: () => import('./realms/forest.js'),
+  himalaya: () => import('./realms/himalaya.js'),
+  lanka: () => import('./realms/lanka.js'),
 };
 
 const q = new URLSearchParams(location.search);

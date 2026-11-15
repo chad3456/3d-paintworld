@@ -104,7 +104,7 @@ export function createFoes({ shared, rigs, scene, fx, light, heightAt, keep = nu
           if (hero.alive && dist < reach * 1.25 && facing && Math.abs(hero.pos.y - foe.pos.y) < 2.2) events.push({ damage: foe.def.attack.damage, from: foe.pos });
         }
         if (done < foe.set.hitAt) foe.yaw += THREE.MathUtils.clamp(angleWrap(Math.atan2(dx, dz) - foe.yaw), -3 * dt, 3 * dt);
-        if (done >= 0.96 || !a.isRunning()) { foe.state = 'chase'; foe.cooldown = foe.def.attack.cooldown * (0.8 + 0.4 * Math.random()); }
+        if (done >= 0.96 || !a.isRunning()) { foe.state = 'chase'; foe.cooldown = foe.def.attack.cooldown * (0.8 + 0.4 * Math.random()); play(foe, 'idle', 0.25); }
       } else {
         if (!foe.awake && hero.alive && dist < foe.aggro) foe.awake = true;
         const far = Math.hypot(foe.pos.x - foe.home.x, foe.pos.z - foe.home.z);
@@ -114,7 +114,7 @@ export function createFoes({ shared, rigs, scene, fx, light, heightAt, keep = nu
           foe.yaw += THREE.MathUtils.clamp(angleWrap(Math.atan2(dx, dz) - foe.yaw), -5 * dt, 5 * dt);
           if (dist < reach * 0.85 && foe.cooldown <= 0 && Math.abs(hero.pos.y - foe.pos.y) < 2.2) {
             foe.state = 'attack'; foe.struck = false;
-            foe.playing = null; play(foe, 'attack', 0.12, foe.set.rate);
+            play(foe, 'attack', 0.12, foe.set.rate);
           } else if (dist > reach * 0.7) speed = foe.set.speed * foe.def.stats.pace;
           // one who can throw fire does, from a distance
           if (foe.ranged) {
@@ -124,7 +124,7 @@ export function createFoes({ shared, rigs, scene, fx, light, heightAt, keep = nu
         } else {
           foe.state = 'idle';
         }
-        play(foe, speed > 0 ? 'walk' : 'idle', 0.25, speed > 0 ? foe.set.walkRate : 1);
+        if (foe.state !== 'attack') play(foe, speed > 0 ? 'walk' : 'idle', 0.25, speed > 0 ? foe.set.walkRate : 1);
       }
       // travel: his own steps, whatever pushed him, and room between him and the next
       v.set(Math.sin(foe.yaw) * speed, 0, Math.cos(foe.yaw) * speed).add(foe.push);

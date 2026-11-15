@@ -135,6 +135,22 @@ function rigWoman(man, gltf) {
   return { object, hips: bones.pelvis.position.length() / rest.pelvis.p.length() };
 }
 
+/**
+ * A .glb by its address; or, where the host serves no .glb files, the same bytes from `<address>.json`
+ * ({ "base64": ... }), which tools/frame-pack.mjs makes.
+ */
+async function loadGlb(loader, url, onProgress) {
+  try {
+    return await loader.loadAsync(url, onProgress);
+  } catch (error) {
+    const packed = await fetch(`${url}.json`).catch(() => null);
+    if (!packed?.ok) throw error;
+    const { base64 } = await packed.json();
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    return loader.parseAsync(bytes.buffer, '');
+  }
+}
+
 export async function loadRigs({ base = './figure/', onProgress } = {}) {
   const loader = new GLTFLoader();
   const files = ['starter-man.glb', 'starter-man-clips.glb', 'epic-clips.glb', 'woman.glb'];
@@ -142,7 +158,7 @@ export async function loadRigs({ base = './figure/', onProgress } = {}) {
   const total = size.reduce((a, b) => a + b, 0);
   const tell = (i) => (e) => { got[i] = Math.min(e.loaded, size[i]); onProgress?.(Math.min(1, got.reduce((a, b) => a + b, 0) / total)); };
   const [m, c, e, w, hands] = await Promise.all([
-    ...files.map((f, i) => loader.loadAsync(base + f, tell(i))),
+    ...files.map((f, i) => loadGlb(loader, base + f, tell(i))),
     fetch(new URL('../figure/hands-anymove.json', import.meta.url)).then((r) => r.json()),
   ]);
   const animations = [...c.animations, ...e.animations];

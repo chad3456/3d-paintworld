@@ -97,6 +97,7 @@ starter man and the two reference scenes. What this repo adds is the game: `src/
 | `src/realms/` | Ayodhya, the forest, the Himalaya, Lanka, and the terrace where a hero is chosen |
 | `tools/test.mjs` | Plays the built game headless and checks its rules (`npm test`, after a build) |
 | `tools/shot.mjs` | Stills of any realm, headless |
+| `tools/frame-pack.mjs` | Packs the built game for hosts that serve no `.glb` files (models as JSON, which `rigs.js` falls back to) |
 
 ## Publishing on Patch
 

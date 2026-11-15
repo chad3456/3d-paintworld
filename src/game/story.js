@@ -38,11 +38,17 @@ function write(save) {
   try { localStorage.setItem(KEY, JSON.stringify(save)); } catch { /* a private window: nothing is kept */ }
 }
 
+// Shown inside another page (Patch's, or any viewer that frames it), the address may not be ours to change: there
+// the realm to go to is left in the tab's own storage and the page is loaded again as it is.
+const framed = (() => { try { return window.parent !== window; } catch { return true; } })();
+const NEXT = `${KEY}:next`;
+const next = (() => { try { return JSON.parse(sessionStorage.getItem(NEXT)) ?? {}; } catch { return {}; } })();
+
 export const story = {
   save: read(),
   /** What the address asks for, else what was last being played. */
-  get realm() { return q.get('realm'); },
-  get hero() { return q.get('hero') ?? this.save.hero ?? null; },
+  get realm() { return q.get('realm') ?? next.realm ?? null; },
+  get hero() { return q.get('hero') ?? next.hero ?? this.save.hero ?? null; },
   chapter(id) { return CHAPTERS.find((c) => c.id === id); },
   next(id) { const i = CHAPTERS.findIndex((c) => c.id === id); return CHAPTERS[i + 1]?.id ?? null; },
   choose(hero) { this.save.hero = hero; write(this.save); },
@@ -53,9 +59,12 @@ export const story = {
   },
   /** Loads the page for a realm (or, with none, the choosing of a hero). */
   go(realm, hero = this.hero) {
-    const next = new URLSearchParams();
-    for (const key of ['quality', 'nopad']) if (q.has(key)) next.set(key, q.get(key));
-    if (realm) { next.set('realm', realm); if (hero) next.set('hero', hero); this.save.at = realm; write(this.save); }
-    location.search = next.toString();
+    const to = new URLSearchParams();
+    for (const key of ['quality', 'nopad']) if (q.has(key)) to.set(key, q.get(key));
+    if (realm) { to.set('realm', realm); if (hero) to.set('hero', hero); this.save.at = realm; write(this.save); }
+    if (framed && !q.has('realm')) {
+      try { sessionStorage.setItem(NEXT, JSON.stringify({ realm: realm ?? null, hero: hero ?? null })); location.reload(); return; } catch { /* no storage: the address it is */ }
+    }
+    location.search = to.toString();
   },
 };

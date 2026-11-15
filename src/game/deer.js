@@ -7,7 +7,8 @@ import { pinDabs } from '../oilpaint/pins.js';
 const UP = new THREE.Vector3(0, 1, 0), FWD = new THREE.Vector3(0, 0, 1);
 
 export function createDeer({ shared, fx, heightAt, light = (p) => p }) {
-  const GOLD = light([[1.0, 0.86, 0.36], [0.88, 0.6, 0.16], [0.52, 0.31, 0.12]]);
+  // it shines a little of itself: even its shade is gold
+  const GOLD = light([[1.0, 0.9, 0.42], [0.98, 0.72, 0.2], [0.8, 0.5, 0.14]]);
   const SPOT = light([[1.0, 0.98, 0.86], [0.92, 0.8, 0.6], [0.6, 0.48, 0.4]]);
   const root = new THREE.Group();
   const parts = [];

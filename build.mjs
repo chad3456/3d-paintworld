@@ -1,4 +1,4 @@
-// Builds the block's demo into dist/ (index.html at the top) with the files it loads and their licences:
+// Builds the game into dist/ (index.html at the top) with the files it loads and their licences:
 // `npm install`, then `npm run build`.
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -10,6 +10,8 @@ const dist = path.join(here, 'dist');
 execSync(`node "${path.join(here, 'node_modules/vite/bin/vite.js')}" build --config vite.config.mjs`, { cwd: here, stdio: 'inherit' });
 
 const put = (from, to) => fs.cpSync(path.join(here, from), path.join(dist, to), { recursive: true });
+put('LICENSE', 'LICENSE.txt');
+put('LICENCE-NOTES.md', 'LICENCE-NOTES.md');
 
 
 

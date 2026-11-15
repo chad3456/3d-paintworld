@@ -1,16 +1,32 @@
-// Starts the picture the address asks for (src/scenes.js) and wires the two buttons that change it.
-import { SCENE, showScene } from './scenes.js';
+// Starts what the address asks for: a realm of the tale with the chosen hero (?realm=forest&hero=sita), or, with
+// neither, the terrace where a hero is chosen. Each realm is a world of its own and is loaded only when wanted.
+import './game/ui.css';
+import { story, CHAPTERS, ENDING } from './game/story.js';
+import { showCard } from './game/hud.js';
+import { HEROES } from './game/cast.js';
 
-document.documentElement.dataset.scene = SCENE;
+const REALMS = {
+  studio: () => import('./realms/studio.js'),
+};
+
 const q = new URLSearchParams(location.search);
-const switcher = document.getElementById('scenes');
-if (q.has('capture') || q.has('clean')) switcher?.remove();
-for (const button of switcher?.querySelectorAll('button') ?? []) {
-  button.classList.toggle('on', button.dataset.scene === SCENE);
-  button.addEventListener('click', () => showScene(button.dataset.scene));
-  // Space is jump: a button must never be left holding the keyboard
-  button.addEventListener('keydown', (e) => e.preventDefault());
-  button.addEventListener('focus', () => button.blur());
+const capture = q.has('capture');
+const realmId = story.realm;
+document.getElementById('loading')?.remove();
+
+if (realmId === 'ending') {
+  const card = showCard({ art: ENDING.art, credit: ENDING.credit, sub: 'The return', heading: 'Ayodhya rejoices', text: ENDING.text, button: 'Tell it again' });
+  await card.pressed;
+  story.go(null);
+} else if (realmId && REALMS[realmId]) {
+  const heroId = HEROES[story.hero] ? story.hero : 'rama';
+  const chapter = story.chapter(realmId);
+  const card = chapter && !capture ? showCard({ art: chapter.art, credit: chapter.credit, sub: chapter.subtitle, heading: chapter.name, text: chapter.text, button: 'Mixing paint', onProgress: true }) : null;
+  const [realm, { play }] = await Promise.all([REALMS[realmId](), import('./game/stage.js')]);
+  const stage = await play(realm, heroId, card);
+  if (card) { card.ready(`Enter as ${HEROES[heroId].name}`); await card.pressed; }
+  stage.begin();
+} else {
+  const { chooseHero } = await import('./game/menu.js');
+  await chooseHero();
 }
-if (SCENE === 'autumn') await import('./main.js');
-else await import('./night/main.js');

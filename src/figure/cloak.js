@@ -4,14 +4,18 @@
 // rounded sticks that the cloth can't enter.
 import * as THREE from 'three';
 
-const COLS = 19, ROWS = 14;
-const DROP = 0.088; // metres of cloth from one row to the next
 const STEP = 1 / 120;
 
 export class Cloak {
-  constructor(bones) {
+  /**
+   * cols, rows: the grid; drop: metres of cloth from one row to the next; wrap: how far round the collar it goes
+   * each way from the middle of the back (radians: 2.45 is a cloak open at the front, 1.2 a cape down the back);
+   * body: the wearer's size against the starter man's.
+   */
+  constructor(bones, { cols = 19, rows = 14, drop = 0.088, wrap = 2.45, body = 1, flare = 0.06 } = {}) {
     this.bones = bones;
-    this.cols = COLS; this.rows = ROWS;
+    this.cols = cols; this.rows = rows; this.drop = drop; this.wrap = wrap; this.body = body;
+    const COLS = cols, ROWS = rows, DROP = drop;
     const n = COLS * ROWS;
     this.p = new Float32Array(n * 3);
     this.prev = new Float32Array(n * 3);
@@ -28,8 +32,8 @@ export class Cloak {
     const rest = new Float32Array(n * 3);
     for (let j = 0; j < ROWS; j++) {
       for (let i = 0; i < COLS; i++) {
-        const a = this.angle(i), flare = 1 + 0.06 * j;
-        rest.set([Math.sin(a) * 0.225 * flare, -j * DROP * 0.93, -Math.cos(a) * 0.16 * flare], (i + j * COLS) * 3);
+        const a = this.angle(i), flare_ = 1 + flare * j;
+        rest.set([Math.sin(a) * 0.225 * body * flare_, -j * DROP * 0.93, -Math.cos(a) * 0.16 * body * flare_], (i + j * COLS) * 3);
       }
     }
     const links = [];
@@ -55,6 +59,7 @@ export class Cloak {
       ['upperarm_l', 'lowerarm_l', 0.075], ['lowerarm_l', 'hand_l', 0.06], ['upperarm_r', 'lowerarm_r', 0.075], ['lowerarm_r', 'hand_r', 0.06],
       ['thigh_l', 'calf_l', 0.105], ['calf_l', 'foot_l', 0.075], ['thigh_r', 'calf_r', 0.105], ['calf_r', 'foot_r', 0.075], ['pelvis', 'pelvis', 0.19],
     ];
+    for (const stick of this.sticks) stick[2] *= body;
     this.ends = new Float32Array(this.sticks.length * 6);
     this.endsBefore = new Float32Array(this.sticks.length * 6);
     this.a = new THREE.Vector3(); this.b = new THREE.Vector3(); this.c = new THREE.Vector3();
@@ -62,9 +67,10 @@ export class Cloak {
   }
 
   /** Where column i sits round the collar: 0 at the middle of the back, most of the way round to the front. */
-  angle(i) { return ((i / (COLS - 1)) * 2 - 1) * 2.45; }
+  angle(i) { return ((i / (this.cols - 1)) * 2 - 1) * this.wrap; }
 
   readBody() {
+    const COLS = this.cols, ROWS = this.rows, DROP = this.drop;
     const B = this.bones, { a, b, X, Y, Z, C } = this;
     this.pinsBefore.set(this.pins);
     this.endsBefore.set(this.ends);
@@ -78,14 +84,14 @@ export class Cloak {
     Y.subVectors(a, b).normalize();
     Z.crossVectors(X, Y).normalize();
     Y.crossVectors(Z, X);
-    C.addScaledVector(Y, 0.075).addScaledVector(Z, -0.01);
+    C.addScaledVector(Y, 0.075 * this.body).addScaledVector(Z, -0.01);
     for (let i = 0; i < COLS; i++) {
       const t = this.angle(i);
       // the collar sits on the shoulders and dips a little at the front
-      const dip = -0.05 * Math.max(0, Math.abs(t) - 1.5);
-      this.pins[i * 3] = C.x + X.x * Math.sin(t) * (half + 0.04) - Z.x * Math.cos(t) * 0.15 + Y.x * dip;
-      this.pins[i * 3 + 1] = C.y + X.y * Math.sin(t) * (half + 0.04) - Z.y * Math.cos(t) * 0.15 + Y.y * dip;
-      this.pins[i * 3 + 2] = C.z + X.z * Math.sin(t) * (half + 0.04) - Z.z * Math.cos(t) * 0.15 + Y.z * dip;
+      const dip = -0.05 * Math.max(0, Math.abs(t) - 1.5), deep = 0.15 * this.body;
+      this.pins[i * 3] = C.x + X.x * Math.sin(t) * (half + 0.04) - Z.x * Math.cos(t) * deep + Y.x * dip;
+      this.pins[i * 3 + 1] = C.y + X.y * Math.sin(t) * (half + 0.04) - Z.y * Math.cos(t) * deep + Y.y * dip;
+      this.pins[i * 3 + 2] = C.z + X.z * Math.sin(t) * (half + 0.04) - Z.z * Math.cos(t) * deep + Y.z * dip;
     }
     this.sticks.forEach(([p, q], k) => {
       B[p].getWorldPosition(a); B[q].getWorldPosition(b);
@@ -94,6 +100,7 @@ export class Cloak {
   }
 
   start() {
+    const COLS = this.cols, ROWS = this.rows, DROP = this.drop;
     this.readBody();
     const { X, Y, Z } = this;
     for (let j = 0; j < ROWS; j++) {
@@ -112,6 +119,7 @@ export class Cloak {
 
   /** Advance by dt. `air(x, y, z, out)` gives the wind there (m/s); `ground(x, z)` the height of the floor. */
   update(dt, air, ground) {
+    const COLS = this.cols, ROWS = this.rows, DROP = this.drop;
     if (!this.started) return this.start();
     this.readBody();
     // a jump of more than a couple of metres is a teleport: hang the cloth afresh
@@ -164,6 +172,7 @@ export class Cloak {
   }
 
   collide(u, ground) {
+    const COLS = this.cols, ROWS = this.rows, DROP = this.drop;
     const { p, ends, endsBefore, sticks } = this;
     for (let k = COLS * 3; k < p.length; k += 3) {
       for (let s = 0; s < sticks.length; s++) {
@@ -200,6 +209,7 @@ export class Cloak {
   }
 
   computeNormals() {
+    const COLS = this.cols, ROWS = this.rows, DROP = this.drop;
     const { p, normals } = this;
     for (let j = 0; j < ROWS; j++) {
       for (let i = 0; i < COLS; i++) {

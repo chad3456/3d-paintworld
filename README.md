@@ -99,6 +99,12 @@ starter man and the two reference scenes. What this repo adds is the game: `src/
 | `tools/shot.mjs` | Stills of any realm, headless |
 | `tools/frame-pack.mjs` | Packs the built game for hosts that serve no `.glb` files (models as JSON, which `rigs.js` falls back to) |
 
+## A Blender model of Rama
+
+`models/rama/` holds a separate, more detailed character: a rigged and textured Rama for Blender (`rama.blend`) and
+for engines (`rama.glb`), with the script that builds it. See [models/rama/README.md](models/rama/README.md). The game
+does not use it yet.
+
 ## Publishing on Patch
 
 The game is ready to publish as a browser game (`dist/` with `index.html` at its top, every path relative, nothing

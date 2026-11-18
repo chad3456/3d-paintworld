@@ -1,0 +1,68 @@
+/* The portfolio's own layer over the shared painted-site styles (../../site/src/style.css): lowercase, a grotesk for
+   the small talk, stickers, a status dot, a ticker. Same committed look: white chrome on painted scenes, ink footer. */
+body.folio {
+  --grot: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --pink: #ff8fc6;
+  --lilac: #b48cff;
+  --lime: #c8ff6a;
+  font-family: var(--grot);
+}
+.folio .s-work { height: 340vh; }
+.folio h1 { font-size: clamp(42px, 6.4vw, 98px); text-align: left; text-shadow: 0 2px 22px rgba(120, 40, 120, 0.35); }
+.folio h1 em { font-style: normal; color: var(--lime); text-shadow: 0 2px 0 rgba(60, 20, 80, 0.4), 0 0 30px rgba(200, 255, 106, 0.35); }
+.folio .hero-words { top: 18vh; width: min(600px, 50vw); }
+.folio .hero-words > p:not(.status) { font: 500 clamp(15px, 1.35vw, 19px)/1.4 var(--grot); max-width: 34ch; margin: 0 0 20px; }
+.status { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 16px; padding: 5px 12px 5px 9px; border-radius: 99px; background: rgba(20, 14, 12, 0.72); font: 500 12px var(--mono); text-shadow: none; }
+.dot { width: 8px; height: 8px; border-radius: 99px; background: var(--lime); box-shadow: 0 0 0 0 rgba(200, 255, 106, 0.7); animation: ping 1.8s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(200, 255, 106, 0); } 100% { box-shadow: 0 0 0 0 rgba(200, 255, 106, 0); } }
+.mail { display: inline-flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; border-radius: 99px; background: var(--ink); color: var(--white); font: 500 14px var(--mono); text-shadow: none; max-width: 100%; }
+.mail-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.mail button { height: 28px; padding: 0 12px; border-radius: 99px; border: 0; background: var(--lime); color: #1a1430; font: 600 12px var(--grot); }
+.mail button[data-done] { background: var(--pink); }
+.mail.under { position: absolute; left: 50%; top: calc(16vh + clamp(110px, 15vw, 230px)); transform: translateX(-50%); opacity: calc(min(1, var(--p, 0) * 3)); }
+
+/* stickers: the things a moodboard is held up with */
+.stickers { position: absolute; right: max(var(--gutter-r), 4vw); bottom: 14vh; display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; width: min(420px, 40vw); opacity: calc(1 - var(--p, 0) * 3); }
+.stickers span { display: inline-block; padding: 8px 14px; border-radius: 12px; font: 700 14px var(--grot); color: #1a1430; background: var(--white); border: 2px solid #1a1430; box-shadow: 3px 3px 0 #1a1430; transform: rotate(var(--r)); }
+.stickers span:nth-child(2) { background: var(--lime); }
+.stickers span:nth-child(3) { background: var(--pink); }
+.stickers span:nth-child(4) { background: var(--lilac); color: var(--white); }
+body.ready .stickers span { animation: pop 0.7s cubic-bezier(.3, 1.6, .5, 1) both; }
+body.ready .stickers span:nth-child(2) { animation-delay: 0.6s; } body.ready .stickers span:nth-child(3) { animation-delay: 0.75s; } body.ready .stickers span:nth-child(4) { animation-delay: 0.9s; }
+body.ready .stickers span:nth-child(1) { animation-delay: 0.45s; }
+@keyframes pop { from { opacity: 0; transform: rotate(var(--r)) scale(0.4); } }
+
+/* the work caption: the project in front */
+.work-caption { --accent: var(--lime); left: max(var(--gutter-l), 5vw); right: auto; top: auto; bottom: 12vh; transform: none; width: min(300px, 80vw); }
+.s-work .caption { opacity: calc(min(1, var(--p, 0) * 12 + 0.6) * min(1, (0.86 - var(--p, 0)) * 7)); }
+.work-name { font: 400 clamp(30px, 3.4vw, 46px)/1 var(--display) !important; margin: 6px 0 6px !important; }
+.work-role { font: 500 14px/1.4 var(--grot) !important; margin: 0 0 12px !important; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tags span { padding: 3px 10px; border-radius: 99px; background: var(--accent); color: #1a1430; font: 600 12px var(--grot); text-shadow: none; }
+.folio .caption p:not(.kicker) { font-family: var(--grot); font-weight: 600; }
+.folio .pill-btn::before { background: var(--lime); box-shadow: 0 0 0 3px rgba(200, 255, 106, 0.3); }
+
+/* ticker under the last scene */
+.ticker { position: relative; z-index: 2; overflow: hidden; background: var(--lime); color: #1a1430; border-block: 2px solid #1a1430; padding-block: 12px; }
+.ticker div { display: flex; gap: 28px; width: max-content; animation: slide 28s linear infinite; font: 800 clamp(22px, 3vw, 36px)/1 var(--grot); }
+.ticker i { font-style: normal; color: #ff4fa3; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* drawer bits */
+.folio #notes h2 { font-family: var(--display); }
+.folio #notes .kicker { color: #b0307a; }
+.folio #notes .role { font: 600 14px var(--grot); color: #6b5a6e; }
+.swatches { display: flex; gap: 8px; margin-top: 20px; }
+.swatches span { width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--paper-ink); }
+.steps { padding-left: 1.4em; display: grid; gap: 8px; font-size: 15px; }
+.steps b { margin-right: 6px; }
+.big-mail { font: 500 clamp(18px, 2vw, 24px) var(--mono) !important; word-break: break-all; padding: 12px 14px; border-radius: 12px; background: #fff; border: 2px solid var(--paper-ink); }
+.folio .lamps-words { color: #ffe9f4; text-shadow: 0 0 30px rgba(255, 120, 200, 0.5), 0 2px 0 rgba(60, 20, 60, 0.6); }
+.folio .foot-note, .folio .foot-h { font-family: var(--grot); }
+.folio .wordmark { font-family: var(--body); }
+
+@media (max-width: 760px) {
+  .folio .hero-words { width: auto; top: 11vh; }
+  .stickers { left: var(--gutter-l); right: var(--gutter-r); width: auto; justify-content: flex-start; bottom: 11vh; }
+  .work-caption { bottom: 10vh; }
+}

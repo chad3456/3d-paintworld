@@ -8,7 +8,9 @@
     "serve": "node tools/serve.mjs dist 5405",
     "test": "node tools/test.mjs",
     "site:dev": "vite --config site/vite.config.mjs --port 5410 --host 127.0.0.1",
-    "site:build": "vite build --config site/vite.config.mjs"
+    "site:build": "vite build --config site/vite.config.mjs",
+    "portfolio:dev": "vite --config portfolio/vite.config.mjs --port 5411 --host 127.0.0.1",
+    "portfolio:build": "vite build --config portfolio/vite.config.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

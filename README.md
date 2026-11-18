@@ -115,6 +115,21 @@ npm run site:build
 
 The page is then in `site/dist`; `npm run site:dev` serves it from source on port 5410.
 
+## A brand designer's portfolio, in the same style
+
+`portfolio/` is a template portfolio built on the same painter as the Ramayana site: a tree in pink and lilac bloom
+with stickers and an availability badge, project cards floating in the sky (scroll to bring each forward, open its
+case study), a manifesto under water you can stir, a studio notebook page, and a contact scene. The name, projects,
+links and every line of copy are in `portfolio/src/content.js`; the four projects there are invented samples.
+
+![Project cards](shots/portfolio/work.jpg)
+
+```bash
+npm run portfolio:build
+```
+
+The page is then in `portfolio/dist`; `npm run portfolio:dev` serves it from source on port 5411.
+
 ## A Blender model of Rama
 
 `models/rama/` holds a separate, more detailed character: a rigged and textured Rama for Blender (`rama.blend`) and

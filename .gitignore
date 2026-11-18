@@ -4,3 +4,4 @@ shots/work/
 *.log
 .env
 site/dist/
+portfolio/dist/

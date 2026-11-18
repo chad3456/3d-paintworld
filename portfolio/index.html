@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="claude:viewport-fit-sides" content="cover" />
+<title>Kiki Brand Portfolio</title>
+<meta name="description" content="A brand designer's portfolio: identity, packaging and motion, in five painted scenes." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400;1,7..72,500&family=Young+Serif&family=JetBrains+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" />
+</head>
+<body class="folio">
+<div id="stage" aria-hidden="true"></div>
+
+<div id="loader" role="status" aria-live="polite">
+  <svg class="lotus" viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M32 4l6 20 20 8-20 6-6 22-6-22-20-6 20-8z" /></svg>
+  <p id="loader-status">planting the tree...</p>
+  <p class="loader-foot">scroll slow. everything here is painted in code.</p>
+</div>
+
+<nav class="pill-nav" aria-label="Site">
+  <a href="#top" class="on"><i data-me="name">kiki</i></a>
+  <a href="#work">work</a>
+  <button type="button" data-notes="contact">say hi</button>
+  <button type="button" id="brush" class="round" title="Brush filter on or off" aria-label="Brush filter">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5 14.5 4.5 7 12 4 9z" fill="currentColor" /><path d="M3.5 9.8 6.2 12.5C5.4 14.3 3.4 15 1.5 14.5 2.3 13.6 2 12.9 2 12c0-1.2.6-2 1.5-2.2z" fill="currentColor" /></svg>
+  </button>
+</nav>
+
+<nav class="rail" aria-label="Scenes">
+  <button type="button" aria-label="Hello"></button>
+  <button type="button" aria-label="Work"></button>
+  <button type="button" aria-label="How I work"></button>
+  <button type="button" aria-label="About"></button>
+  <button type="button" aria-label="Contact"></button>
+</nav>
+
+<main id="top">
+  <section data-scene="hello" class="s-hero">
+    <div class="frame">
+      <div class="hero-words">
+        <p class="status"><span class="dot" aria-hidden="true"></span><span data-me="status">open for work</span></p>
+        <h1>hi, i make brands people <em>feel.</em></h1>
+        <p><span data-me="name">kiki</span>, <span data-me="role">brand designer</span>: <span data-me="line"></span></p>
+        <div class="mail"><span class="mail-text"></span><button type="button">copy</button></div>
+      </div>
+      <div id="stickers" class="stickers" aria-hidden="true"></div>
+      <a class="scroll-down" href="#work">see the work <span aria-hidden="true">⌄</span></a>
+    </div>
+  </section>
+
+  <section data-scene="work" id="work" class="s-work">
+    <div class="frame">
+      <div class="caption work-caption" id="work-caption">
+        <p class="kicker" id="work-index">01 / 04</p>
+        <p class="work-name" id="work-name"></p>
+        <p class="work-role" id="work-role"></p>
+        <div class="tags" id="work-tags"></div>
+        <button type="button" class="pill-btn" data-notes="case">open the case</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="pond" class="s-pond">
+    <div class="frame">
+      <div class="caption">
+        <p class="kicker">how i work</p>
+        <p>stir it. (seriously, move your mouse)</p>
+        <button type="button" class="pill-btn" data-notes="process">the process</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="about" class="s-grove">
+    <div class="frame">
+      <div class="caption">
+        <p class="kicker">about</p>
+        <p>a page from the studio notebook.</p>
+        <button type="button" class="pill-btn" data-notes="contact">work with me</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="contact" class="s-lamps">
+    <div class="frame">
+      <h2 class="lamps-words">let's make<br />something.</h2>
+      <div class="mail under"><span class="mail-text"></span><button type="button">copy</button></div>
+    </div>
+  </section>
+</main>
+
+<div id="ticker" class="ticker" aria-hidden="true"></div>
+
+<footer class="foot">
+  <p class="wordmark" data-me="name">kiki</p>
+  <div class="foot-cols">
+    <div><p class="foot-h">✻ do</p><ul><li>naming</li><li>identity systems</li><li>packaging</li><li>art direction</li><li>motion</li></ul></div>
+    <div><p class="foot-h">✻ scenes</p><ul>
+      <li><a href="#top">hello ↑</a></li>
+      <li><button type="button" data-goto="1">work ↑</button></li>
+      <li><button type="button" data-goto="2">how i work ↑</button></li>
+      <li><button type="button" data-goto="3">about ↑</button></li>
+    </ul></div>
+    <div><p class="foot-h">✻ elsewhere</p><ul id="socials"></ul></div>
+    <div><p class="foot-h">✻ say hi</p><ul><li><button type="button" data-notes="contact">get in touch ↗</button></li></ul></div>
+  </div>
+  <p class="foot-note">every tree, card, ripple and lamp here is painted in code. projects shown are samples.</p>
+</footer>
+
+<aside id="notes" hidden aria-label="Details" tabindex="-1">
+  <button type="button" id="notes-close" aria-label="Close">✕</button>
+  <div id="notes-body"></div>
+</aside>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

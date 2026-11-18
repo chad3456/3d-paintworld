@@ -9,7 +9,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
 // ---------------------------------------------------------------------------------------------------------------
 // a sky of the hour: a wash from deep blue overhead to pale near the horizon, clouds, and the wind's streaks
 // ---------------------------------------------------------------------------------------------------------------
-function skyDome(top, horizon, { sun = null } = {}) {
+export function skyDome(top, horizon, { sun = null } = {}) {
   const m = new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false,
     uniforms: { uTop: { value: new THREE.Color(...top) }, uHorizon: { value: new THREE.Color(...horizon) }, uSun: { value: sun ?? V(0, -1, 0) } },
@@ -28,7 +28,7 @@ function skyDome(top, horizon, { sun = null } = {}) {
   return dome;
 }
 
-function clouds(scene, { count = 14, seed = 2, ring = 160, low = -10, high = 60, scale = 1 } = {}) {
+export function clouds(scene, { count = 14, seed = 2, ring = 160, low = -10, high = 60, scale = 1 } = {}) {
   const r = P.rng(seed);
   const textures = [0, 1, 2, 3].map((i) => P.texture(P.cloud({ seed: seed * 10 + i })));
   const group = new THREE.Group();
@@ -46,7 +46,7 @@ function clouds(scene, { count = 14, seed = 2, ring = 160, low = -10, high = 60,
   return group;
 }
 
-function windStreaks(scene, { at = V(0, 30, -120), size = 260, seed = 3 } = {}) {
+export function windStreaks(scene, { at = V(0, 30, -120), size = 260, seed = 3 } = {}) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size / 2), new THREE.MeshBasicMaterial({ map: P.texture(P.streaks({ seed })), transparent: true, depthWrite: false, opacity: 0.8 }));
   m.position.copy(at);
   scene.add(m);
@@ -54,7 +54,7 @@ function windStreaks(scene, { at = V(0, 30, -120), size = 260, seed = 3 } = {}) 
 }
 
 /** Leaves blown through the air in front of the camera: an instanced swarm that wraps round a box. */
-function swarm(scene, { count = 220, textures, box = V(40, 24, 30), centre = V(0, 4, -6), size = [0.25, 0.6], wind = V(-3, -1.2, 0.4), seed = 7 }) {
+export function swarm(scene, { count = 220, textures, box = V(40, 24, 30), centre = V(0, 4, -6), size = [0.25, 0.6], wind = V(-3, -1.2, 0.4), seed = 7 }) {
   const r = P.rng(seed);
   const groups = textures.map((t) => {
     const mesh = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1.5), new THREE.MeshBasicMaterial({ map: t, alphaTest: 0.4, side: THREE.DoubleSide }), Math.ceil(count / textures.length));
@@ -82,7 +82,7 @@ function swarm(scene, { count = 220, textures, box = V(40, 24, 30), centre = V(0
   };
 }
 
-const ASHOKA = [
+export const ASHOKA = [
   [[255, 196, 72], [242, 116, 32], [168, 44, 22]],
   [[255, 150, 60], [226, 64, 30], [140, 24, 24]],
   [[250, 92, 52], [200, 34, 34], [110, 14, 26]],
@@ -92,13 +92,13 @@ const ASHOKA = [
 // ---------------------------------------------------------------------------------------------------------------
 // I. The ashoka tree on its hill, in full flower
 // ---------------------------------------------------------------------------------------------------------------
-export function treeScene() {
+export function treeScene({ palette = ASHOKA, sky = [[0.08, 0.34, 0.86], [0.62, 0.84, 1.0]], ground: groundBase = [214, 110, 40], bark: barkColor = 0x6e4a36, light: [skyLight, groundLight] = [0xe4f0ff, 0xd08040], blade = ['#e9a046', '#c76a26', '#f5c46a', '#9c4a1e'], grassTint = 0xffe0b0 } = {}) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 1000);
-  scene.add(skyDome([0.08, 0.34, 0.86], [0.62, 0.84, 1.0], { sun: V(0.6, 0.5, -0.6) }));
+  scene.add(skyDome(sky[0], sky[1], { sun: V(0.6, 0.5, -0.6) }));
   const cloudGroup = clouds(scene, { seed: 4, low: -14, high: 50 });
   windStreaks(scene, { at: V(40, 40, -150), size: 300 });
-  scene.add(new THREE.HemisphereLight(0xe4f0ff, 0xd08040, 2.4));
+  scene.add(new THREE.HemisphereLight(skyLight, groundLight, 2.4));
   const sun = new THREE.DirectionalLight(0xfff0d8, 3.2);
   sun.position.set(8, 12, 6);
   scene.add(sun);
@@ -110,7 +110,7 @@ export function treeScene() {
   const hillY = (x, z) => -0.11 * x - 0.018 * z * z * 0.08 + 0.6 * Math.sin(x * 0.18) * Math.cos(z * 0.21) - 2.2;
   for (let i = 0; i < hp.count; i++) hp.setY(i, hillY(hp.getX(i), hp.getZ(i)));
   hillGeo.computeVertexNormals();
-  const ground = P.texture(P.litter({ seed: 11, base: [214, 110, 40], palette: ASHOKA }), { repeat: true });
+  const ground = P.texture(P.litter({ seed: 11, base: groundBase, palette }), { repeat: true });
   ground.repeat.set(9, 6);
   const hill = new THREE.Mesh(hillGeo, new THREE.MeshLambertMaterial({ map: ground }));
   hill.position.z = -6;
@@ -140,12 +140,12 @@ export function treeScene() {
     const g = bladeCanvas.getContext('2d');
     for (let i = 0; i < 9; i++) {
       const x = 8 + Math.random() * 48;
-      g.strokeStyle = ['#e9a046', '#c76a26', '#f5c46a', '#9c4a1e'][i % 4];
+      g.strokeStyle = blade[i % 4];
       g.lineWidth = 3 + Math.random() * 3; g.lineCap = 'round';
       g.beginPath(); g.moveTo(32, 256); g.quadraticCurveTo(x, 140, x + (Math.random() - 0.5) * 30, 20 + Math.random() * 80); g.stroke();
     }
   }
-  const grass = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.6, 1.4), new THREE.MeshBasicMaterial({ map: P.texture(bladeCanvas), alphaTest: 0.5, side: THREE.DoubleSide, color: 0xffe0b0 }), 900);
+  const grass = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.6, 1.4), new THREE.MeshBasicMaterial({ map: P.texture(bladeCanvas), alphaTest: 0.5, side: THREE.DoubleSide, color: grassTint }), 900);
   {
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
     for (let i = 0; i < 900; i++) {
@@ -160,7 +160,7 @@ export function treeScene() {
   // the tree: a few limbs, and the crown as thousands of flower clusters and leaves gathered into lobes
   const TREE = V(-7.5, 0, -5);
   TREE.y = groundAt(TREE.x, TREE.z);
-  const bark = new THREE.MeshLambertMaterial({ color: 0x6e4a36 });
+  const bark = new THREE.MeshLambertMaterial({ color: barkColor });
   const limb = (pts, rad) => {
     const curve = new THREE.CatmullRomCurve3(pts.map((p) => p.clone().add(TREE)));
     const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, rad, 8), bark);
@@ -182,7 +182,7 @@ export function treeScene() {
   limb([V(0.0, 3.8, 0), V(0.6, 5.4, -0.8), V(1.2, 6.6, -0.6)], 0.26);
   limb([V(0, 0.4, 0), V(-0.9, 0.1, 0.5), V(-1.6, -0.3, 0.8)], 0.22);
   const lobes = [[0, 6.6, 0, 3.4], [3.2, 5.8, 0.4, 2.8], [-3.2, 5.9, 0, 2.8], [1.2, 7.8, -0.6, 2.6], [-1.6, 7.6, 0.5, 2.5], [4.8, 4.9, 0.6, 2.0], [-4.6, 5.1, 0.2, 2.1], [0.4, 5, 1.6, 2.4], [2.4, 4.6, -1.4, 2.2], [-2.2, 4.8, -1.2, 2.2], [6.2, 5.6, 0.2, 1.6], [3.0, 7.4, 0.8, 2.0]];
-  const leafTex = ASHOKA.map((cols, i) => P.texture(P.leaf({ w: 128, h: 192, shape: i === 1 ? 'maple' : 'ashoka', colors: cols, seed: 70 + i, veins: false })));
+  const leafTex = palette.map((cols, i) => P.texture(P.leaf({ w: 128, h: 192, shape: i === 1 ? 'maple' : 'ashoka', colors: cols, seed: 70 + i, veins: false })));
   const crowns = leafTex.map((t) => new THREE.InstancedMesh(new THREE.PlaneGeometry(0.62, 0.92), new THREE.MeshBasicMaterial({ map: t, alphaTest: 0.45, side: THREE.DoubleSide }), 1500));
   const counts = crowns.map(() => 0);
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), col = new THREE.Color();
@@ -284,7 +284,7 @@ export function leafScene({ words }) {
 // ---------------------------------------------------------------------------------------------------------------
 // III. The lotus pond at Pampa: water that answers the hand, words under the surface, koi and flowers above
 // ---------------------------------------------------------------------------------------------------------------
-export function pondScene(renderer, { words }) {
+export function pondScene(renderer, { words, fallen = [[[250, 70, 60], [206, 20, 30], [120, 6, 20]], [[255, 160, 150], [230, 90, 100], [150, 40, 60]]] }) {
   const SIM = 256;
   const make = () => new THREE.WebGLRenderTarget(SIM, SIM, { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false });
   let a = make(), b = make();
@@ -378,7 +378,7 @@ export function pondScene(renderer, { words }) {
   const padTex = [0, 1].map((i) => P.texture(P.pad({ seed: 3 + i })));
   const lotusTex = P.texture(P.lotus({}));
   const jasmine = P.texture(P.flower({}));
-  const redLeaf = [P.texture(P.leaf({ w: 256, h: 384, colors: [[250, 70, 60], [206, 20, 30], [120, 6, 20]], seed: 5 })), P.texture(P.leaf({ w: 256, h: 384, colors: [[255, 160, 150], [230, 90, 100], [150, 40, 60]], seed: 6 }))];
+  const redLeaf = fallen.map((colors, k) => P.texture(P.leaf({ w: 256, h: 384, colors, seed: 5 + k })));
   const add = (texture, size, x, y, z, spin = 0) => {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size * (texture.image.height / texture.image.width)), new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false }));
     m.position.set(x, y, z);
@@ -446,7 +446,7 @@ export function pondScene(renderer, { words }) {
 // ---------------------------------------------------------------------------------------------------------------
 // IV. Hanuman's message, a written leaf lying on the floor of the Ashoka grove beside a stream
 // ---------------------------------------------------------------------------------------------------------------
-export function letterScene({ title, date, paragraphs }) {
+export function letterScene({ title, date, paragraphs, palette = [...ASHOKA, [[255, 230, 120], [240, 190, 50], [170, 110, 20]]], base = [130, 46, 22], water = null }) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x3a1a10);
   const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 200);
@@ -456,7 +456,7 @@ export function letterScene({ title, date, paragraphs }) {
   scene.add(sun);
 
   // the floor: red and gold ashoka litter, a stream of green water down the left, its sandy bank
-  const floorTex = P.texture(P.litter({ seed: 17, base: [130, 46, 22], palette: [...ASHOKA, [[255, 230, 120], [240, 190, 50], [170, 110, 20]]] }), { repeat: true });
+  const floorTex = P.texture(P.litter({ seed: 17, base, palette }), { repeat: true });
   floorTex.repeat.set(4, 4);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShaderMaterial({
     uniforms: { tLeaves: { value: floorTex }, uTime: { value: 0 } },
@@ -533,7 +533,7 @@ export function letterScene({ title, date, paragraphs }) {
     m.scale.setScalar(s); m.position.set(x, s * 0.3, z); m.rotation.y = r() * 3;
     scene.add(m);
   }
-  const loose = [...ASHOKA, [[255, 230, 120], [240, 190, 50], [170, 110, 20]]].map((c, i) => P.texture(P.leaf({ w: 128, h: 192, shape: i % 2 ? 'maple' : 'ashoka', colors: c, seed: 120 + i })));
+  const loose = palette.map((c, i) => P.texture(P.leaf({ w: 128, h: 192, shape: i % 2 ? 'maple' : 'ashoka', colors: c, seed: 120 + i })));
   const jasmine = P.texture(P.flower({}));
   for (let i = 0; i < 46; i++) {
     const t = i < 8 ? jasmine : loose[i % loose.length];

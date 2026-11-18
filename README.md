@@ -136,6 +136,18 @@ The page is then in `portfolio/dist`; `npm run portfolio:dev` serves it from sou
 for engines (`rama.glb`), with the script that builds it. See [models/rama/README.md](models/rama/README.md). The game
 does not use it yet.
 
+## Deploying (Vercel)
+
+One build makes all three pages: `npm run build` writes the game to `dist/`, the Ramayana site to `dist/ramayana/`
+and the portfolio to `dist/portfolio/`. `vercel.json` sets the build command, the output folder and trailing slashes,
+so on Vercel (Vite preset, or none) the site serves:
+
+| Path | Page |
+|---|---|
+| `/` | The game |
+| `/ramayana/` | Ramayana, retold |
+| `/portfolio/` | The brand designer's portfolio |
+
 ## Publishing on Patch
 
 The game is ready to publish as a browser game (`dist/` with `index.html` at its top, every path relative, nothing

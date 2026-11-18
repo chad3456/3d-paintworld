@@ -1,4 +1,5 @@
-// Builds the game into dist/ (index.html at the top) with the files it loads and their licences:
+// Builds the game into dist/ (index.html at the top) with the files it loads and their licences, and beside it
+// the Ramayana site (dist/ramayana) and the portfolio (dist/portfolio):
 // `npm install`, then `npm run build`.
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -8,6 +9,10 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(here, 'dist');
 execSync(`node "${path.join(here, 'node_modules/vite/bin/vite.js')}" build --config vite.config.mjs`, { cwd: here, stdio: 'inherit' });
+// the two painted pages ride along with the game: the Ramayana site at /ramayana/ and the portfolio at /portfolio/
+for (const [config, at] of [['site/vite.config.mjs', 'ramayana'], ['portfolio/vite.config.mjs', 'portfolio']]) {
+  execSync(`node "${path.join(here, 'node_modules/vite/bin/vite.js')}" build --config ${config} --outDir "${path.join(dist, at)}" --emptyOutDir`, { cwd: here, stdio: 'inherit' });
+}
 
 const put = (from, to) => fs.cpSync(path.join(here, from), path.join(dist, to), { recursive: true });
 put('LICENSE', 'LICENSE.txt');

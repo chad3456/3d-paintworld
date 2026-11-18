@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="claude:viewport-fit-sides" content="cover" />
+<title>Ramayana, Retold</title>
+<meta name="description" content="Walk the Ramayana from Ayodhya to Lanka and home again, through five painted scenes." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400;1,7..72,500&family=Young+Serif&family=JetBrains+Mono:wght@400;500&family=Tiro+Devanagari+Sanskrit&display=swap" />
+<link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+<div id="stage" aria-hidden="true"></div>
+
+<div id="loader" role="status" aria-live="polite">
+  <svg class="lotus" viewBox="0 0 64 64" aria-hidden="true">
+    <g fill="currentColor">
+      <path d="M32 8c5 8 6 16 0 26-6-10-5-18 0-26z" /><path d="M14 18c9 2 15 8 17 17-9-1-16-7-17-17z" /><path d="M50 18c-1 10-8 16-17 17 2-9 8-15 17-17z" />
+      <path d="M6 34c9-2 17 1 24 7-9 3-18 1-24-7z" /><path d="M58 34c-6 8-15 10-24 7 7-6 15-9 24-7z" /><path d="M14 46h36c-3 6-10 9-18 9s-15-3-18-9z" />
+    </g>
+  </svg>
+  <p id="loader-status">Planting the ashoka…</p>
+  <p class="loader-foot">Scroll slowly. Every picture is painted in code.</p>
+</div>
+
+<nav class="pill-nav" aria-label="Site">
+  <a href="#top" class="on"><i>Rāmāyaṇa</i></a>
+  <button type="button" data-notes="here">The tale</button>
+  <a href="https://github.com/chad3456/3d-paintworld" target="_blank" rel="noopener">Play ↗</a>
+  <button type="button" id="brush" class="round" title="Brush filter on or off" aria-label="Brush filter">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5 14.5 4.5 7 12 4 9z" fill="currentColor" /><path d="M3.5 9.8 6.2 12.5C5.4 14.3 3.4 15 1.5 14.5 2.3 13.6 2 12.9 2 12c0-1.2.6-2 1.5-2.2z" fill="currentColor" /></svg>
+  </button>
+</nav>
+
+<nav class="rail" aria-label="Scenes">
+  <button type="button" aria-label="The ashoka tree"></button>
+  <button type="button" aria-label="The vow"></button>
+  <button type="button" aria-label="The pond"></button>
+  <button type="button" aria-label="The message"></button>
+  <button type="button" aria-label="The lamps"></button>
+</nav>
+
+<main id="top">
+  <section data-scene="ashoka" class="s-hero">
+    <div class="frame">
+      <div class="hero-words">
+        <h1>Ramayana,<br />retold.</h1>
+        <p>A prince's exile, a queen's courage and a monkey's devotion, as the sage Valmiki first sang them. Scroll to walk from Ayodhya to Lanka, and home again.</p>
+        <div class="verse">
+          <span id="verse-text" lang="sa">रामो विग्रहवान् धर्मः</span>
+          <span class="verse-gloss">Rama is dharma embodied · 3.37.13</span>
+          <button type="button" id="verse-copy" aria-label="Copy the verse"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M11 3.5V3a1.5 1.5 0 0 0-1.5-1.5h-6A1.5 1.5 0 0 0 2 3v6a1.5 1.5 0 0 0 1.5 1.5H4" fill="none" stroke="currentColor" stroke-width="1.6" /></svg></button>
+        </div>
+      </div>
+      <a class="scroll-down" href="#vow">Scroll down <span aria-hidden="true">⌄</span></a>
+    </div>
+  </section>
+
+  <section data-scene="vow" id="vow" class="s-vow">
+    <div class="frame">
+      <div class="caption">
+        <p class="kicker">II · Ayodhya Kanda</p>
+        <p>A father's promise, and a son who keeps it for him.</p>
+        <button type="button" class="pill-btn" data-notes="1">Read the tale</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="pond" class="s-pond">
+    <div class="frame">
+      <div class="caption">
+        <p class="kicker">III · The lake of Pampa</p>
+        <p>Stir the water.</p>
+        <button type="button" class="pill-btn" data-notes="2">Read the tale</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="grove" class="s-grove">
+    <div class="frame">
+      <div class="caption">
+        <p class="kicker">IV · Sundara Kanda</p>
+        <p>What Hanuman carried across the sea.</p>
+        <button type="button" class="pill-btn" data-notes="3">Read the tale</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-scene="lamps" class="s-lamps">
+    <div class="frame">
+      <h2 class="lamps-words">Light the way<br />home.</h2>
+      <button type="button" class="pill-btn under" data-notes="4">Read the tale</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="wordmark">Rāmāyaṇa</p>
+  <div class="foot-cols">
+    <div><p class="foot-h">✻ The seven books</p><ul><li>Bala Kanda</li><li>Ayodhya Kanda</li><li>Aranya Kanda</li><li>Kishkindha Kanda</li><li>Sundara Kanda</li><li>Yuddha Kanda</li><li>Uttara Kanda</li></ul></div>
+    <div><p class="foot-h">✻ Scenes</p><ul>
+      <li><a href="#top">The ashoka tree ↑</a></li>
+      <li><button type="button" data-goto="1">The vow ↑</button></li>
+      <li><button type="button" data-goto="2">The pond ↑</button></li>
+      <li><button type="button" data-goto="3">The message ↑</button></li>
+      <li><button type="button" data-goto="4">The lamps ↑</button></li>
+    </ul></div>
+    <div><p class="foot-h">✻ Read further</p><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Ramayana" target="_blank" rel="noopener">Ramayana, an overview ↗</a></li>
+      <li><a href="https://www.valmikiramayan.net/" target="_blank" rel="noopener">Valmiki's verses, translated ↗</a></li>
+    </ul></div>
+    <div><p class="foot-h">✻ Play</p><ul>
+      <li><a href="https://github.com/chad3456/3d-paintworld" target="_blank" rel="noopener">The Painted Epic, a game ↗</a></li>
+    </ul></div>
+  </div>
+  <p class="foot-note">Every tree, leaf, wave and lamp on this page is painted in code. A retelling, after Valmiki.</p>
+</footer>
+
+<aside id="notes" hidden aria-label="The tale" tabindex="-1">
+  <button type="button" id="notes-close" aria-label="Close the tale">✕</button>
+  <div id="notes-body"></div>
+</aside>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -3,3 +3,4 @@ dist/
 shots/work/
 *.log
 .env
+site/dist/

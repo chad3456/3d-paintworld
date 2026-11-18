@@ -99,6 +99,22 @@ starter man and the two reference scenes. What this repo adds is the game: `src/
 | `tools/shot.mjs` | Stills of any realm, headless |
 | `tools/frame-pack.mjs` | Packs the built game for hosts that serve no `.glb` files (models as JSON, which `rigs.js` falls back to) |
 
+## The website: Ramayana, retold
+
+`site/` is a separate scroll-driven page that walks the story in five painted 3D scenes: an ashoka tree in flower, a
+peepal leaf carrying Rama's vow, the lotus pond at Pampa (move the mouse to stir it), Hanuman's message on the floor of
+the Ashoka grove, and the lamps of Ayodhya on the night of the return. A notes drawer tells the tale behind each scene.
+Every picture is painted in code (`site/src/paint.js`); a gust of leaves carries one scene into the next, and a light
+brush filter goes over the whole.
+
+![The ashoka tree](shots/site/hero.jpg)
+
+```bash
+npm run site:build
+```
+
+The page is then in `site/dist`; `npm run site:dev` serves it from source on port 5410.
+
 ## A Blender model of Rama
 
 `models/rama/` holds a separate, more detailed character: a rigged and textured Rama for Blender (`rama.blend`) and

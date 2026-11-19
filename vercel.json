@@ -4,10 +4,62 @@
   "outputDirectory": "dist",
   "trailingSlash": true,
   "headers": [
-    { "source": "/kokeshi/models/(.*)\\.usdz", "headers": [{ "key": "Content-Type", "value": "model/vnd.usdz+zip" }] },
-    { "source": "/kokeshi/models/(.*)\\.glb", "headers": [{ "key": "Content-Type", "value": "model/gltf-binary" }] },
-    { "source": "/kokeshi/models/(.*)\\.stl", "headers": [{ "key": "Content-Type", "value": "model/stl" }] },
-    { "source": "/(.*)/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
-    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] }
+    {
+      "source": "/models/(.*)\\.usdz",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "model/vnd.usdz+zip"
+        }
+      ]
+    },
+    {
+      "source": "/models/(.*)\\.glb",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "model/gltf-binary"
+        }
+      ]
+    },
+    {
+      "source": "/models/(.*)\\.stl",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "model/stl"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/kokeshi",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/kokeshi/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
   ]
 }

@@ -9,8 +9,9 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(here, 'dist');
 execSync(`node "${path.join(here, 'node_modules/vite/bin/vite.js')}" build --config vite.config.mjs`, { cwd: here, stdio: 'inherit' });
-// the two painted pages ride along with the game: the Ramayana site at /ramayana/ and the portfolio at /portfolio/
-for (const [config, at] of [['site/vite.config.mjs', 'ramayana'], ['portfolio/vite.config.mjs', 'portfolio']]) {
+// the other pages ride along with the game: the Ramayana site at /ramayana/, the portfolio at /portfolio/ and the
+// kokeshi collection at /kokeshi/ (its models are made beforehand by `npm run kokeshi:export` and kept in the repo)
+for (const [config, at] of [['site/vite.config.mjs', 'ramayana'], ['portfolio/vite.config.mjs', 'portfolio'], ['kokeshi/vite.config.mjs', 'kokeshi']]) {
   execSync(`node "${path.join(here, 'node_modules/vite/bin/vite.js')}" build --config ${config} --outDir "${path.join(dist, at)}" --emptyOutDir`, { cwd: here, stdio: 'inherit' });
 }
 

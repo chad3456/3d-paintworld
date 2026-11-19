@@ -13,6 +13,7 @@ Code MIT. Art CC0 1.0 or public domain. Checked 2026-11-15.
 | `src/figure/rapier/` | Rapier 0.21.0, `@dimforge/rapier3d-compat`, as vendored in the oil-paint block | Apache-2.0 |
 | three.js 0.186.1 | npm | MIT; its notice ships as `THIRD-PARTY-NOTICES.md` |
 | `models/rama/` (`rama.blend`, `rama.glb`, stills) | Built by `tools/blender/build_rama.py` from MakeHuman's base mesh, targets and game rig (as shipped in MPFB2, github.com/makehumancommunity/mpfb2) and MakeHuman's system assets pack (skin, eyes, brows, lashes, teeth, tongue, hair); clothes, beads, bow and quiver made in code | CC0 1.0 |
+| `kokeshi/` (the page, and the 48 models in `kokeshi/public/models`) | Written and made in code for this repository; no picture, model or scan of anyone is used | Code MIT; models CC0 1.0 |
 | `shots/` | Stills of this game | CC0 1.0 |
 
 There is no sound. Nothing here has no stated source.

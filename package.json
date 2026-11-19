@@ -10,7 +10,10 @@
     "site:dev": "vite --config site/vite.config.mjs --port 5410 --host 127.0.0.1",
     "site:build": "vite build --config site/vite.config.mjs",
     "portfolio:dev": "vite --config portfolio/vite.config.mjs --port 5411 --host 127.0.0.1",
-    "portfolio:build": "vite build --config portfolio/vite.config.mjs"
+    "portfolio:build": "vite build --config portfolio/vite.config.mjs",
+    "kokeshi:dev": "vite --config kokeshi/vite.config.mjs --port 5412 --host 127.0.0.1",
+    "kokeshi:build": "vite build --config kokeshi/vite.config.mjs",
+    "kokeshi:export": "node tools/kokeshi-export.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

@@ -136,10 +136,35 @@ The page is then in `portfolio/dist`; `npm run portfolio:dev` serves it from sou
 for engines (`rama.glb`), with the script that builds it. See [models/rama/README.md](models/rama/README.md). The game
 does not use it yet.
 
+## Thinkers in Wood: a kokeshi collection
+
+`kokeshi/` is a collection of sixteen kokeshi, the turned wooden dolls of northern Japan, of philosophers,
+scientists and artists: Socrates, Confucius, Laozi, Marcus Aurelius, Rumi, Leonardo, Shakespeare, Descartes, Kant,
+Mozart, Nietzsche, Marie Curie, Tesla, Van Gogh, Gandhi and Ada Lovelace. Every doll is built in code with three.js
+(`kokeshi/src/kokeshi.js`): a lathe-turned body with the traditional red and green rings, a painted face, and the
+details that make it someone (beard, hair, hat, spectacles, collar, something held) with a robe patterned from their
+own work. What each detail stands for is listed in `kokeshi/src/dolls.js` and on the page.
+
+![The collection](shots/kokeshi/collection.jpg)
+
+Each doll downloads as **GLB** (web, Blender, Unity; metres), **USDZ** (AR on iPhone and iPad) and **STL** (3D printing;
+millimetres), all about 16 cm tall. The files are made from the page itself and kept in `kokeshi/public/models`:
+
+```bash
+npm run kokeshi:build
+```
+
+```bash
+npm run kokeshi:export
+```
+
+The exporter loads each GLB back and measures it before writing the next. The collection keeps to historical figures:
+the likenesses are interpretations of how each has long been portrayed.
+
 ## Deploying (Vercel)
 
-One build makes all three pages: `npm run build` writes the game to `dist/`, the Ramayana site to `dist/ramayana/`
-and the portfolio to `dist/portfolio/`. `vercel.json` sets the build command, the output folder and trailing slashes,
+One build makes every page: `npm run build` writes the game to `dist/`, the Ramayana site to `dist/ramayana/`,
+the portfolio to `dist/portfolio/` and the kokeshi collection to `dist/kokeshi/`. `vercel.json` sets the build command, the output folder and trailing slashes,
 so on Vercel (Vite preset, or none) the site serves:
 
 | Path | Page |
@@ -147,6 +172,7 @@ so on Vercel (Vite preset, or none) the site serves:
 | `/` | The game |
 | `/ramayana/` | Ramayana, retold |
 | `/portfolio/` | The brand designer's portfolio |
+| `/kokeshi/` | Thinkers in Wood, the kokeshi collection, with its downloadable models |
 
 ## Publishing on Patch
 

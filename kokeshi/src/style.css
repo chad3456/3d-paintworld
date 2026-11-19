@@ -1,0 +1,82 @@
+/* Washi and lacquer. Layout: a big stand on the left with the doll's card beside it, the shelf of all sixteen below. */
+:root {
+  --washi: #f3ede1;
+  --washi-2: #ebe2d1;
+  --ink: #221a16;
+  --muted: #6d5f55;
+  --shu: #c8312a;
+  --matsu: #2f7a3e;
+  --wood: #b98b5c;
+  --line: rgba(34, 26, 22, 0.14);
+  --mincho: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --gothic: 'Zen Kaku Gothic New', 'Hiragino Sans', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) { --washi: #1d1916; --washi-2: #26211d; --ink: #f1e8da; --muted: #b5a797; --line: rgba(241, 232, 218, 0.14); color-scheme: dark; }
+}
+:root[data-theme='dark'] { --washi: #1d1916; --washi-2: #26211d; --ink: #f1e8da; --muted: #b5a797; --line: rgba(241, 232, 218, 0.14); color-scheme: dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--washi); color: var(--ink); font: 16px/1.6 var(--gothic);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background-image: radial-gradient(rgba(150, 120, 80, 0.06) 1px, transparent 1px);
+  background-size: 7px 7px;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--shu); outline-offset: 3px; border-radius: 4px; }
+main, .top, .foot { max-width: 1240px; margin: 0 auto; }
+
+.top { padding-block: 48px 26px; display: grid; grid-template-columns: auto 1fr; column-gap: 28px; align-items: end; }
+.mark { grid-row: span 2; margin: 0; writing-mode: vertical-rl; font: 800 30px/1 var(--mincho); color: var(--shu); letter-spacing: 0.2em; border-right: 2px solid var(--shu); padding-right: 12px; }
+h1 { margin: 0; font: 800 clamp(40px, 6vw, 76px)/1 var(--mincho); letter-spacing: -0.01em; }
+.lede { margin: 12px 0 0; max-width: 60ch; color: var(--muted); }
+
+.viewer { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: stretch; scroll-margin-top: 16px; }
+.stage { position: relative; min-height: min(78vh, 760px); border-radius: 28px; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, #fff9ee 0%, var(--washi-2) 70%); border: 1px solid var(--line); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+.stage canvas:active { cursor: grabbing; }
+.arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 46px; height: 46px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255, 252, 245, 0.85); color: #221a16; font-size: 20px; cursor: pointer; }
+.arrow:hover { background: #fff; }
+.left { left: 14px; } .right { right: 14px; }
+.hint { position: absolute; left: 0; right: 0; bottom: 14px; margin: 0; text-align: center; font-size: 12px; color: #6d5f55; pointer-events: none; }
+
+.card { padding: 28px 26px; border-radius: 28px; background: var(--washi-2); border: 1px solid var(--line); min-width: 0; }
+.no { margin: 0; font: 700 12px var(--gothic); letter-spacing: 0.16em; color: var(--shu); }
+.card h2 { margin: 6px 0 2px; font: 800 clamp(30px, 3.2vw, 42px)/1.05 var(--mincho); text-wrap: balance; }
+.when { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+.known { margin: 0 0 18px; font: 500 18px/1.5 var(--mincho); }
+.card h3 { margin: 22px 0 8px; font: 700 12px var(--gothic); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.details { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.details li { padding-left: 18px; position: relative; font-size: 15px; }
+.details li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 99px; background: var(--shu); box-shadow: 0 0 0 3px rgba(200, 49, 42, 0.18); }
+.downloads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.downloads a { display: grid; gap: 2px; padding: 12px; border-radius: 14px; background: var(--washi); border: 1px solid var(--line); text-decoration: none; font-size: 12px; color: var(--muted); }
+.downloads a:hover { border-color: var(--shu); }
+.ar-img { display: none; }
+.downloads b { font: 800 18px var(--mincho); color: var(--ink); }
+.downloads .size { color: var(--matsu); font-weight: 700; }
+.fine { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+
+.shelf-wrap { padding-block: 56px 20px; }
+.shelf-wrap h2 { font: 800 28px var(--mincho); margin: 0 0 18px; display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+.loading-note { font: 500 13px var(--gothic); color: var(--muted); }
+.shelf { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 14px; }
+.shelf button { width: 100%; display: grid; justify-items: center; gap: 2px; padding: 10px 8px 14px; border-radius: 20px; border: 1px solid var(--line); background: var(--washi-2); cursor: pointer; color: var(--ink); font: inherit; }
+.shelf button:hover, .shelf button[aria-current='true'] { border-color: var(--shu); background: var(--washi); }
+.shelf img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: contain; }
+.shelf img:not([src]) { background: linear-gradient(90deg, transparent, rgba(150, 120, 80, 0.12), transparent) 0 0 / 200% 100%; animation: shine 1.4s linear infinite; border-radius: 12px; }
+@keyframes shine { to { background-position: -200% 0; } }
+.sname { font: 700 15px/1.2 var(--mincho); text-align: center; }
+.syears { font-size: 12px; color: var(--muted); }
+
+.foot { padding-block: 30px calc(40px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+.foot p { max-width: 70ch; }
+.foot-links a { color: var(--shu); }
+
+@media (max-width: 860px) {
+  .viewer { grid-template-columns: minmax(0, 1fr); }
+  .stage { min-height: 62vh; }
+  .top { grid-template-columns: minmax(0, 1fr); }
+  .mark { writing-mode: horizontal-tb; border: 0; padding: 0; font-size: 18px; margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
